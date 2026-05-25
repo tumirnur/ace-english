@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ace English Tenses — IELTS &amp; TOEFL</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div id="login-overlay" class="login-overlay">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="login-logo__amp">&amp;</span><span class="login-logo__t">T</span><span class="login-logo__i">I</span>
+    </div>
+    <h1 class="login-title">Ace English</h1>
+    <p class="login-sub">The adaptive platform for your IELTS &amp; TOEFL success</p>
+
+    <div class="login-toggle">
+      <button class="login-toggle__btn active" id="btn-mode-login" onclick="setLoginMode('login')">Войти</button>
+      <button class="login-toggle__btn" id="btn-mode-reg" onclick="setLoginMode('register')">Регистрация</button>
+    </div>
+
+    <div class="login-form">
+      <input id="login-name" class="login-input" type="text"
+             placeholder="Имя" autocomplete="off" maxlength="50">
+      <input id="login-password" class="login-input" type="password"
+             placeholder="Пароль" maxlength="50">
+      <p class="login-error" id="login-error"></p>
+      <button class="btn btn-orange login-btn" id="login-submit-btn" onclick="doLogin()">Войти →</button>
+    </div>
+    <p class="login-hint" id="login-hint">Нет аккаунта? Нажми «Регистрация»</p>
+  </div>
+</div>
+
+<div class="cur-dot"  aria-hidden="true"></div>
+<div class="cur-ring" aria-hidden="true"></div>
+
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-inner">
+    <span>Present Simple</span><span class="t-sep">·</span>
+    <span>Past Simple</span><span class="t-sep">·</span>
+    <span>Present Continuous</span><span class="t-sep">·</span>
+    <span>Past Continuous</span><span class="t-sep">·</span>
+    <span>Future Simple</span><span class="t-sep">·</span>
+    <span>Future (going to)</span><span class="t-sep">·</span>
+    <span>Present Perfect</span><span class="t-sep">·</span>
+    <span>Past Perfect</span><span class="t-sep">·</span>
+    <span>Present Perfect Continuous</span><span class="t-sep">·</span>
+    <span>Irregular Verbs</span><span class="t-sep">·</span>
+    <span>Subject + Verb</span><span class="t-sep">·</span>
+    <span>Present Simple</span><span class="t-sep">·</span>
+    <span>Past Simple</span><span class="t-sep">·</span>
+    <span>Present Continuous</span><span class="t-sep">·</span>
+    <span>Past Continuous</span><span class="t-sep">·</span>
+    <span>Future Simple</span><span class="t-sep">·</span>
+    <span>Future (going to)</span><span class="t-sep">·</span>
+    <span>Present Perfect</span><span class="t-sep">·</span>
+    <span>Past Perfect</span><span class="t-sep">·</span>
+    <span>Present Perfect Continuous</span><span class="t-sep">·</span>
+    <span>Irregular Verbs</span><span class="t-sep">·</span>
+    <span>Subject + Verb</span><span class="t-sep">·</span>
+  </div>
+</div>
+
+<nav class="tabs-nav" aria-label="Разделы">
+  <div class="tabs-nav__tabs">
+    <button class="tab-btn active" onclick="switchTab('course')">Курс</button>
+    <button class="tab-btn" onclick="switchTab('student')">Мой прогресс</button>
+    <button class="tab-btn" onclick="switchTab('teacher')">Преподаватель</button>
+    <button class="tab-btn" onclick="switchTab('oulad')">OULAD</button>
+  </div>
+  <div class="nav-user hidden" id="nav-user">
+    <div class="nav-user__dot" id="nav-user-letter">А</div>
+    <span id="nav-user-name">Имя</span>
+<span class="nav-user__logout" onclick="doLogout()">↩ Выйти</span>
+  </div>
+</nav>
+
+<section class="hero-editorial" aria-label="Hero">
+  <div class="hero-band hero-band--dark">
+    <div class="hero-band__static">Ace English</div>
+  </div>
+  <div class="hero-band hero-band--accent">
+    <div class="hero-band__label">The adaptive platform built for your IELTS &amp; TOEFL success</div>
+  </div>
+</section>
+
+<section id="tab-course" class="tab-panel active">
+  <div class="workspace-shell">
+    <div class="tenses-explorer">
+
+      <div class="graph-panel">
+        <div class="graph-panel__head">Граф знаний — английские времена</div>
+        <div class="graph-svg-scroll">
+          <svg id="graph" width="500" height="810" viewBox="0 0 500 810">
+            <defs>
+              <marker id="arrowhead" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                <polygon points="0 0,7 3.5,0 7" fill="rgba(12,12,12,.25)"/>
+              </marker>
+            </defs>
+            <g id="edges-layer"></g>
+            <g id="chips-layer"></g>
+            <g id="nodes-layer"></g>
+          </svg>
+        </div>
+        <div class="graph-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(255,45,120,.08);border:1px solid rgba(255,45,120,.25)"></div>Заблокировано</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff2d78"></div>Доступно</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#3a5200;border:1.5px solid rgba(212,245,60,.5)"></div>В процессе</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#0c0c0c"></div>Освоено ≥80%</div>
+        </div>
+      </div>
+
+      <div class="question-panel" id="question-panel">
+        <div class="empty-hint">
+          <div>Нажми на тему в графе, чтобы начать отвечать на вопросы</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="tab-student" class="tab-panel">
+  <div class="workspace-shell">
+
+    <div id="student-header" style="display:none"></div>
+    <div class="stats-row" id="student-stats">
+      <div class="loader" style="margin:1.5rem 0"></div>
+    </div>
+
+    <div class="two-col">
+      <div class="result-card">
+        <p class="result-card__label">Прогресс по темам</p>
+        <div id="topic-bars"></div>
+      </div>
+      <div class="result-card">
+        <p class="result-card__label">Рекомендации</p>
+        <div id="advice-area" style="padding:.5rem 0"></div>
+      </div>
+    </div>
+
+    <div class="result-card" style="margin-top:0">
+      <p class="result-card__label">Место в группе</p>
+      <div id="rank-area"></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="tab-teacher" class="tab-panel">
+  <div class="workspace-shell">
+    <h2 class="section-heading">Обзор групп</h2>
+    <div class="groups-row" id="groups-row"></div>
+
+    <div class="detail-panel" id="group-detail">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1rem">
+        <h2 class="section-heading" id="detail-heading" style="margin:0"></h2>
+        <button class="btn btn-orange btn-sm" id="ai-advice-btn" onclick="loadGroupAiAdvice()">План вмешательства</button>
+      </div>
+      <div id="group-ai-advice" style="display:none" class="result-card" style="margin-bottom:1rem"></div>
+      <div class="detail-grid">
+        <div class="result-card">
+          <p class="result-card__label">Точность по темам (тепловая карта)</p>
+          <div id="topic-heatmap"></div>
+        </div>
+        <div class="result-card" style="padding:0;overflow:hidden">
+          <p class="result-card__label" style="padding:1.2rem 1.15rem .5rem">Ученики группы</p>
+          <div style="overflow-x:auto">
+            <table class="teacher-table">
+              <thead>
+                <tr>
+                  <th>Имя</th>
+                  <th>Точность</th>
+                  <th>Серия</th>
+                  <th>Слабые темы</th>
+                </tr>
+              </thead>
+              <tbody id="students-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="teacher-student-detail" class="teacher-sd-panel" style="display:none">
+        <div class="teacher-sd-back">
+          <button class="btn btn-ghost btn-sm" onclick="closeTeacherStudentDetail()">← Назад к группе</button>
+          <span id="tsd-name" style="font-weight:700;font-size:1.05rem"></span>
+        </div>
+        <div id="tsd-header" style="display:none"></div>
+        <div class="stats-row" id="tsd-stats"></div>
+        <div class="two-col" style="margin-top:1.25rem">
+          <div class="result-card">
+            <p class="result-card__label">Прогресс по темам</p>
+            <div id="tsd-bars"></div>
+          </div>
+          <div class="result-card">
+            <p class="result-card__label">Рекомендации</p>
+            <div id="tsd-advice"></div>
+          </div>
+        </div>
+        <div class="result-card" style="margin-top:1.25rem">
+          <p class="result-card__label">Место в группе</p>
+          <div id="tsd-rank"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section id="tab-oulad" class="tab-panel">
+  <div class="workspace-shell">
+
+    <div class="oulad-hero">
+      <div class="oulad-hero__badge">Open University Learning Analytics Dataset</div>
+      <h2 class="oulad-hero__title">ML-модель обучена на реальных студентах</h2>
+      <p class="oulad-hero__sub">Данные 32 593 студентов Open University (Великобритания) за 2013–2014 год.<br>
+        Random Forest предсказывает исход курса, K-Means разбивает на поведенческие кластеры.</p>
+    </div>
+
+    <div class="stats-row" id="oulad-stats-row">
+      <div class="loader" style="margin:1.5rem 0"></div>
+    </div>
+
+    <div class="two-col" style="margin-top:0">
+      <div class="result-card">
+        <p class="result-card__label">Распределение результатов в датасете</p>
+        <div id="oulad-dist"></div>
+      </div>
+      <div class="result-card">
+        <p class="result-card__label">K-Means кластеры (поведенческие профили)</p>
+        <div id="oulad-clusters"></div>
+      </div>
+    </div>
+
+    <div class="result-card" style="margin-top:0;padding:0;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.15rem .5rem;flex-wrap:wrap;gap:.75rem">
+        <p class="result-card__label" style="margin:0">Предсказания модели — выборка из датасета</p>
+        <button class="btn btn-orange btn-sm" onclick="loadOuladSample()">Обновить выборку</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="teacher-table oulad-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Курс</th>
+              <th>Год</th>
+              <th>Пол</th>
+              <th>Возраст</th>
+              <th>Баллы</th>
+              <th>Клики</th>
+              <th>Факт</th>
+              <th>Предсказание RF</th>
+              <th>Вероятность</th>
+              <th>Кластер</th>
+            </tr>
+          </thead>
+          <tbody id="oulad-tbody">
+            <tr><td colspan="11" style="text-align:center;padding:2rem;color:var(--muted)">Загрузка...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
