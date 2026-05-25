@@ -47,22 +47,37 @@ FALLBACK_EXPLANATIONS: dict[str, str] = {
     "ppc_since_for": "Has been + -ing с since/for — процесс от прошлого до сейчас.",
 }
 
-_MODEL = "claude-haiku-4-5-20251001"
+_MODEL = "gemini-2.0-flash"
+_configured = False
 
 
 def _api_key() -> str:
     return settings.llm_api_key or os.environ.get("LLM_API_KEY", "")
 
 
+def _configure() -> bool:
+    global _configured
+    key = _api_key()
+    if not key:
+        return False
+    if not _configured:
+        import google.generativeai as genai
+        genai.configure(api_key=key)
+        _configured = True
+    return True
+
+
 async def _request(prompt: str, max_tokens: int = 400) -> str:
-    from anthropic import AsyncAnthropic
-    client = AsyncAnthropic(api_key=_api_key())
-    resp = await client.messages.create(
-        model=_MODEL,
-        max_tokens=max_tokens,
-        messages=[{"role": "user", "content": prompt}],
+    import google.generativeai as genai
+    import asyncio
+    _configure()
+    model = genai.GenerativeModel(_MODEL)
+    resp = await asyncio.to_thread(
+        model.generate_content,
+        prompt,
+        generation_config={"max_output_tokens": max_tokens, "temperature": 0.7},
     )
-    return resp.content[0].text.strip()
+    return resp.text.strip()
 
 
 async def _request_json(prompt: str, max_tokens: int = 400) -> dict:
